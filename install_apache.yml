@@ -20,3 +20,9 @@
         - php
         - php-common
       state: latest 
+
+  - name: Ubuntu Apache
+    apt:
+      name: apache2
+      state: latest
+    when: ansible_distribution == "Ubuntu"

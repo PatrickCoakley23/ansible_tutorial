@@ -1,4 +1,9 @@
+[webservers]
 patrick3@192.168.122.18
 patrick4@192.168.122.131
+
+[db_servers] 
 patrick5@192.168.122.174
-patrick6@192.168.122.250
+
+[file_servers] 
+patrick6@192.168.122.250 

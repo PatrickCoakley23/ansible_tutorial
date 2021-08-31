@@ -1,0 +1,4 @@
+root    ALL=(ALL)   ALL
+simone    ALL=NOPASSWD:ALL,/bin/mount,/bin/umount
+
+%wheel  ALL=(ALL)   ALL

@@ -1,4 +1,5 @@
-root    ALL=(ALL)   ALL
-simone    ALL=NOPASSWD:ALL,/bin/mount,/bin/umount
+## Same thing without a password
+%wheel  ALL=(ALL)       NOPASSWD: ALL
 
-%wheel  ALL=(ALL)   ALL
+
+

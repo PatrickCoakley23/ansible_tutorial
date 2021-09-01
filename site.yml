@@ -21,102 +21,21 @@
   
 - hosts: all
   become: true
-  tasks: 
+  roles:
+    - base 
 
-  - name: add ssh key for simone
-    tags: always 
-    authorized_key: 
-      user: simone
-      key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC1pfy/UJtOl/w61flBMc728iSc51iXGSYWP8olwaO36dumZU+AmTi30OIV6Q+oIK5/NSJvYj4Il3cuRS2gGbmQD0ZJZuvV5+n65Ud1VhYLq92KLpGI4jlcKIqhbfhuJcNCkefpmZugM32pBBGOnZszH1kp/wFMBckw2kBWbe3F7NjCQKEHS/MKR8MMLvVkpy+BcIgvC8LfRMb+K2duMP4tpcWdRK8fqkVZUWVMo+j4gy1vfCodQ3Xyya/7ROLXQQ3MNdQHvRMGrjDj1uMmcRHmZSYZCmQKv3JKXxExiftUNfRVXyl4HH6WsE6cDKbeznu9zctsP21CgUGFfmSbiazcpDRE9SHe5+mio1tnXqz2Zt+01Qjdadx8HdpZ7ByacrVCiYoWnYAijwmi6lCXY+Aub2smZJBw3JWxrRxDknTPsMZwdVKBnia9smwwVeCvFTjCiU3RvIXva8LtmlygfxwmoLoXSS/3bDf1/Nz6FqibVGs7SZU4BMOeXR2kaaFeSqCkDVZ/9MKv5fKCCXUpynFqm8WCKw2OV5bFGyfkAr7/jVMS6R+Qe5E5DtTHwsMu3jtb2kesboWfK2baAUj3T5pNvPVd515Y3a/gemD+j2ThUKgO0lE8MRJ5WTUqVQOH6YBxnt+hTwtJoyRfdyZIepwRZhn8bp4LD10L/49mXuqHUQ== ansible"
-      
 - hosts: webservers
   become: true
-  tasks: 
-
-  - name: install apache and php for Ubuntu servers
-    tags: apache, apache2, ubuntu
-    apt:
-      name:
-        - apache2
-        - libapache2-mod-php
-      state: latest
-    when: ansible_distribution == "Ubuntu"
- 
-  - name: install apache and php for Fedora servers
-    tags: apache, fedora
-    dnf:
-      name:
-        - httpd
-        - php
-      state: latest
-    when: ansible_distribution == "Fedora"
-
-  - name: start httpd (Fedora)
-    tags: apache, fedora, httpd
-    service:
-      name: httpd
-      state: started
-      enabled: yes
-    when: ansible_distribution == "Fedora"
-
-  - name: start ssh (fedora)
-    tags: fedora, ssh
-    service:
-      name: sshd
-      state: started 
-      enabled: yes
-    when: ansible_distribution == "Fedora"
-
-  - name: change email address for admin
-    tags: apache, fedora, httpd
-    lineinfile:
-      path: /etc/httpd/conf/httpd.conf
-      regexp: '^ServerAdmin'
-      line: ServerAdmin somebody@somewhere.net
-    when: ansible_distribution == "Fedora"
-    register: httpd 
-
-  - name: restart httpd (fedora)
-    tags: apache, centos, httpd
-    service: 
-      name: httpd
-      state: restarted
-    when: httpd.changed
-
-  - name: copy default html file for site
-    tags: apache, apache2, httpd
-    copy: 
-      src: default_site.html
-      dest: /var/www/html/index.html
-      owner: root
-      group: root
-      mode: 0644
+  roles:
+    - webservers
 
 - hosts: db_servers
   become: true
-  tasks:
-
-  - name: install mariadb package (Fedora)
-    tags: db, mariadb, fedora
-    dnf: 
-      name: mariadb
-      state: latest
-    when: ansible_distribution == "Fedora"
-
-  - name: install mariadb package (ubuntu)
-    tags: db, mariadb, ubuntu
-    apt:
-      name: mariadb-server
-      state: latest
-    when: ansible_distribution == "Ubuntu"
-
+  roles:
+    - db_servers
+ 
 - hosts: file_servers
-  become: true 
-  tasks: 
-
-  - name: install samba package
-    tags: samba
-    package: 
-      name: samba 
-      state: latest
-      
+  become: true
+  roles:
+    - file_servers
+  
